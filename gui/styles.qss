@@ -1,0 +1,86 @@
+/* Основной стиль для всего окна */
+QMainWindow {
+    background-color: #2e3b4e;  /* Темный фон для окна */
+    color: #ecf0f1;  /* Светлый цвет текста */
+    font-family: 'Bubblez Graffiti', sans-serif;  /* Шрифт для всего окна */
+    font-size: 12pt;  /* Размер шрифта */
+    border-radius: 10px;
+}
+/* Стиль для name_lbl */
+#name_lbl {
+    font-family: "Bubblez Graffiti";
+    font-size: 34px;
+    color: white;
+}
+
+/* Стиль для QLabel */
+QLabel {
+    color: #ecf0f1;  /* Цвет текста */
+    font-size: 14pt;  /* Размер шрифта для надписей */
+    font-family: "Faberge";
+    padding: 10px;
+}
+
+/* Стиль для QPushButton */
+QPushButton {
+    background-color: #34495e;  /* Темный фон для кнопок */
+    border: 2px solid #16a085;  /* Граница с зелеными акцентами */
+    border-radius: 5px;  /* Скругленные углы */
+    color: #ecf0f1;  /* Светлый цвет текста */
+    font-size: 14pt;  /* Размер шрифта */
+    font-family: "Faberge";
+    padding: 10px;
+    min-width: 150px;  /* Минимальная ширина кнопки */
+    min-height: 40px;  /* Минимальная высота кнопки */
+}
+
+/* Стиль для кнопки при наведении */
+QPushButton:hover {
+    background-color: #1abc9c;  /* Зеленый цвет при наведении */
+}
+
+/* Стиль для кнопки при нажатии */
+QPushButton:pressed {
+    background-color: #16a085;  /* Темный зеленый при нажатии */
+}
+
+/* Стиль для QListWidget */
+QListWidget {
+    background-color: #34495e;  /* Темный фон для списка */
+    color: #ecf0f1;  /* Светлый цвет текста */
+    font-size: 12pt;  /* Размер шрифта */
+    border: 1px solid #16a085;  /* Граница */
+    border-radius: 5px;  /* Скругленные углы */
+}
+
+/* Стиль для выделенного элемента в QListWidget */
+QListWidget::item:selected {
+    background-color: #16a085;  /* Зеленый фон для выделенного элемента */
+    color: #2c3e50;  /* Темный цвет текста для выделенного */
+}
+
+/* Стиль для вертикального скроллбара в QListWidget */
+QScrollBar:vertical {
+    background-color: #2c3e50;
+    width: 10px;
+    border-radius: 5px;
+}
+
+QScrollBar::handle:vertical {
+    background-color: #16a085;
+    border-radius: 5px;
+}
+
+QScrollBar::handle:vertical:hover {
+    background-color: #1abc9c;
+}
+
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
+    background-color: #2c3e50;
+}
+
+/* Стиль для фокуса на элементах (например, на кнопках) */
+QPushButton:focus {
+    outline: none;
+    border: 2px solid #1abc9c;  /* Зеленая граница при фокусе */
+}
