@@ -6,6 +6,7 @@ QMainWindow {
     font-size: 12pt;  /* Размер шрифта */
     border-radius: 10px;
 }
+
 /* Стиль для name_lbl */
 #name_lbl {
     font-family: "Bubblez Graffiti";
@@ -81,6 +82,52 @@ QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
 
 /* Стиль для фокуса на элементах (например, на кнопках) */
 QPushButton:focus {
+    outline: none;
+    border: 2px solid #1abc9c;  /* Зеленая граница при фокусе */
+}
+
+/* Стиль для QMessageBox */
+QMessageBox {
+    background-color: #2e3b4e;  /* Темный фон для окна */
+    color: #ecf0f1;  /* Светлый цвет текста */
+    font-family: "Faberge";  /* Шрифт для текста */
+    font-size: 14pt;  /* Размер шрифта */
+    border: 2px solid #16a085;  /* Зеленая граница */
+    border-radius: 10px;  /* Скругленные углы */
+    padding: 10px;  /* Отступы */
+}
+
+/* Стиль для текста в QMessageBox */
+QMessageBox QLabel {
+    color: #ecf0f1;  /* Светлый цвет текста */
+    font-family: "Faberge";  /* Шрифт для текста */
+    font-size: 14pt;  /* Размер шрифта */
+}
+
+/* Стиль для кнопок в QMessageBox */
+QMessageBox QPushButton {
+    background-color: #34495e;  /* Темный фон для кнопок */
+    border: 2px solid #16a085;  /* Зеленая граница */
+    border-radius: 5px;  /* Скругленные углы */
+    color: #ecf0f1;  /* Светлый цвет текста */
+    font-size: 14pt;  /* Размер шрифта */
+    font-family: "Faberge";  /* Шрифт */
+    padding: 10px;  /* Внутренние отступы */
+    min-width: 100px;  /* Минимальная ширина кнопки */
+}
+
+/* Кнопка при наведении в QMessageBox */
+QMessageBox QPushButton:hover {
+    background-color: #1abc9c;  /* Зеленый цвет при наведении */
+}
+
+/* Кнопка при нажатии в QMessageBox */
+QMessageBox QPushButton:pressed {
+    background-color: #16a085;  /* Темный зеленый при нажатии */
+}
+
+/* Кнопка с фокусом в QMessageBox */
+QMessageBox QPushButton:focus {
     outline: none;
     border: 2px solid #1abc9c;  /* Зеленая граница при фокусе */
 }
