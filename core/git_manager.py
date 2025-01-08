@@ -1,12 +1,15 @@
 import os
 import json
 from git import Repo, InvalidGitRepositoryError, NoSuchPathError
+from core.file_status import FileStatus  # Импортируем класс FileStatus
 
 class GitManager:
     def __init__(self):
         # Путь к файлу конфигурации, где хранятся последние репозитории
         self.config_path = os.path.join("data", "config.json")
         self.ensure_config_file()
+        self.repo = None  # Это будет хранить текущий репозиторий
+        self.file_status = None  # Это будет хранить объект для работы с состоянием файлов
 
     def ensure_config_file(self):
         """Создаёт файл конфигурации, если он отсутствует или пустой."""
@@ -98,3 +101,55 @@ class GitManager:
             config = {"recent_repositories": []}  # Возвращаем дефолтное значение
 
         return config.get("recent_repositories", [])
+
+    def load_repo(self, folder_path):
+        """
+        Загружает репозиторий и создаёт объект для работы с состоянием файлов.
+
+        Args:
+            folder_path (str): Путь к папке с репозиторием.
+        """
+        if self.is_git_repository(folder_path):
+            self.repo = Repo(folder_path)
+            self.file_status = FileStatus(self.repo)  # Инициализируем FileStatus для текущего репозитория
+        else:
+            raise ValueError(f"{folder_path} не является Git-репозиторием.")
+
+    def get_repo(self):
+        """
+        Возвращает текущий репозиторий.
+
+        Returns:
+            Repo: Объект репозитория Git.
+        """
+        if self.repo:
+            return self.repo
+        else:
+            raise ValueError("Репозиторий не загружен. Сначала вызовите load_repo().")
+
+    def get_file_status(self):
+        """
+        Получает состояние файлов в текущем репозитории.
+
+        Returns:
+            dict: Статус файлов в репозитории (modified, untracked, staged).
+        """
+        if self.file_status:
+            return self.file_status.get_all_file_status()
+        else:
+            raise ValueError("Репозиторий не загружен. Сначала вызовите load_repo().")
+
+    def get_modified_files(self):
+        """Возвращает файлы, которые были изменены."""
+        status = self.get_file_status()
+        return status.get('modified', [])
+
+    def get_untracked_files(self):
+        """Возвращает файлы, которые не отслеживаются Git."""
+        status = self.get_file_status()
+        return status.get('untracked', [])
+
+    def get_staged_files(self):
+        """Возвращает файлы, которые находятся в staged (готовые для коммита)."""
+        status = self.get_file_status()
+        return status.get('staged', [])

@@ -1,6 +1,6 @@
 /* Основной стиль для всего окна */
 QMainWindow {
-    background-color: #2e3b4e;  /* Темный фон для окна */
+    background-color: #2b2d30;  /* Темный фон для окна */
     color: #ecf0f1;  /* Светлый цвет текста */
     font-family: 'Bubblez Graffiti', sans-serif;  /* Шрифт для всего окна */
     font-size: 12pt;  /* Размер шрифта */
@@ -25,7 +25,7 @@ QLabel {
 /* Стиль для QPushButton */
 QPushButton {
     background-color: #34495e;  /* Темный фон для кнопок */
-    border: 2px solid #16a085;  /* Граница с зелеными акцентами */
+
     border-radius: 5px;  /* Скругленные углы */
     color: #ecf0f1;  /* Светлый цвет текста */
     font-size: 14pt;  /* Размер шрифта */
@@ -37,7 +37,7 @@ QPushButton {
 
 /* Стиль для кнопки при наведении */
 QPushButton:hover {
-    background-color: #1abc9c;  /* Зеленый цвет при наведении */
+    background-color: #4a4b4e;  /* Серый цвет при наведении */
 }
 
 /* Стиль для кнопки при нажатии */
@@ -47,10 +47,10 @@ QPushButton:pressed {
 
 /* Стиль для QListWidget */
 QListWidget {
-    background-color: #34495e;  /* Темный фон для списка */
+    background-color: #1e1f22;  /* Темный фон для списка */
     color: #ecf0f1;  /* Светлый цвет текста */
     font-size: 12pt;  /* Размер шрифта */
-    border: 1px solid #16a085;  /* Граница */
+
     border-radius: 5px;  /* Скругленные углы */
 }
 
@@ -83,7 +83,6 @@ QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
 /* Стиль для фокуса на элементах (например, на кнопках) */
 QPushButton:focus {
     outline: none;
-    border: 2px solid #1abc9c;  /* Зеленая граница при фокусе */
 }
 
 /* Стиль для QMessageBox */
@@ -130,4 +129,48 @@ QMessageBox QPushButton:pressed {
 QMessageBox QPushButton:focus {
     outline: none;
     border: 2px solid #1abc9c;  /* Зеленая граница при фокусе */
+}
+
+
+QTableWidget {
+    border: 1px solid #ccc;
+    background-color: #4a4b4e;
+    gridline-color: #ddd;
+    font: 14px "Segoe UI";
+}
+
+QHeaderView::section {
+    background-color: #34495e;
+    color: white;
+    padding: 4px;
+    font: bold 14px "Segoe UI";
+    border: 1px solid #ccc;
+}
+
+QTableWidget::item {
+    padding: 5px;
+    border: none;
+}
+
+QTableWidget::item:selected {
+    background-color: #e5f1fb;
+    color: black;
+}
+
+QTableWidget QScrollBar:vertical {
+    border: none;
+    background: #f3f3f3;
+    width: 10px;
+    margin: 0px 0px 0px 0px;
+}
+
+QTableWidget QScrollBar::handle:vertical {
+    background: #c4c4c4;
+    border-radius: 5px;
+}
+
+QTableWidget QScrollBar::add-line:vertical,
+QTableWidget QScrollBar::sub-line:vertical {
+    background: none;
+    height: 0px;
 }

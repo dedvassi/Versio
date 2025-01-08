@@ -1,13 +1,21 @@
 import os
+from PyQt6 import QtWidgets
 from PyQt6.QtWidgets import (
     QApplication, QMainWindow, QWidget, QLabel, QPushButton, QListWidget, QVBoxLayout, QGridLayout, QFileDialog, QMessageBox
 )
+from gui.repository_window import RepositoryWindowUi
 from PyQt6.QtCore import Qt
 from core.git_manager import GitManager  # Подключаем модуль для работы с Git
+
 
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
+        self.git_manager = GitManager()  # Экземпляр GitManager
+        self.ui = RepositoryWindowUi(self.git_manager)  # Создаем объект второго окна
+        self.setup_ui()
+
+    def setup_ui(self):
         self.setWindowTitle("Versio 😄 by dedvassi")
         self.resize(340, 450)
 
@@ -58,9 +66,6 @@ class MainWindow(QMainWindow):
         main_layout.addLayout(project_layout, 2, 0)
         main_layout.addWidget(self.settings_btn, 3, 0)
 
-        # Логика работы с Git
-        self.git_manager = GitManager()  # Экземпляр GitManager
-
         # Обновляем список недавих проектов
         self.update_recent_projects()
 
@@ -90,9 +95,23 @@ class MainWindow(QMainWindow):
         # 3. Сохранить в список недавних проектов
         self.save_recent_repository(folder)
 
+        # 4. Загружаем новый репозиторий
+        self.git_manager.load_repo(folder)
+        # Закрываем текущее окно и открываем новое
+        self.open_repository_window()
+
+    def open_repository_window(self):
+        """Закрыть главное окно и открыть окно репозитория"""
+        # Закрываем главное окно
+        self.close()
+
+        # Открываем окно репозитория
+        self.repo_window = QtWidgets.QMainWindow()
+        self.ui.setupUi(self.repo_window)
+        self.repo_window.show()
+
     def save_recent_repository(self, path):
         """Сохранить путь к репозиторию и обновить список проектов"""
-        print(path)
         self.git_manager.save_recent_repository(path)
         self.update_recent_projects()
 
