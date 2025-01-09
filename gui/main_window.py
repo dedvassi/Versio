@@ -12,7 +12,6 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.git_manager = GitManager()  # Экземпляр GitManager
-        self.ui = RepositoryWindowUi(self.git_manager)  # Создаем объект второго окна
         self.setup_ui()
 
     def setup_ui(self):
@@ -94,6 +93,7 @@ class MainWindow(QMainWindow):
 
         # 3. Сохранить в список недавних проектов
         self.save_recent_repository(folder)
+        print(self.git_manager.get_recent_repositories())
 
         # 4. Загружаем новый репозиторий
         self.git_manager.load_repo(folder)
@@ -102,6 +102,8 @@ class MainWindow(QMainWindow):
 
     def open_repository_window(self):
         """Закрыть главное окно и открыть окно репозитория"""
+        self.ui = RepositoryWindowUi(self.git_manager)  # Создаем объект второго окна
+
         # Закрываем главное окно
         self.close()
 
