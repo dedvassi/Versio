@@ -101,6 +101,8 @@ class RepositoryWindowUi(object):
             self.menubar.setObjectName("menubar")
             MainWindow.setMenuBar(self.menubar)
 
+            self.refresh_table()
+
             self.retranslateUi(MainWindow)
             QtCore.QMetaObject.connectSlotsByName(MainWindow)
 

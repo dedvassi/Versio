@@ -138,18 +138,3 @@ class GitManager:
             return self.file_status.get_all_file_status()
         else:
             raise ValueError("Репозиторий не загружен. Сначала вызовите load_repo().")
-
-    def get_modified_files(self):
-        """Возвращает файлы, которые были изменены."""
-        status = self.get_file_status()
-        return status.get('modified', [])
-
-    def get_untracked_files(self):
-        """Возвращает файлы, которые не отслеживаются Git."""
-        status = self.get_file_status()
-        return status.get('untracked', [])
-
-    def get_staged_files(self):
-        """Возвращает файлы, которые находятся в staged (готовые для коммита)."""
-        status = self.get_file_status()
-        return status.get('staged', [])

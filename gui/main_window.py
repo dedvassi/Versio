@@ -1,5 +1,5 @@
 import os
-from PyQt6 import QtWidgets
+from PyQt6 import QtWidgets, QtGui
 from PyQt6.QtWidgets import (
     QApplication, QMainWindow, QWidget, QLabel, QPushButton, QListWidget, QVBoxLayout, QGridLayout, QFileDialog, QMessageBox
 )
@@ -21,6 +21,7 @@ class MainWindow(QMainWindow):
         # Определяем путь к файлу стилей относительно текущего файла
         current_dir = os.path.dirname(os.path.abspath(__file__))  # Папка gui/
         style_path = os.path.join(current_dir, "styles.qss")
+        img_path = os.path.join(current_dir, "img")
 
         # Применяем стили
         with open(style_path, "r") as file:
@@ -43,10 +44,9 @@ class MainWindow(QMainWindow):
 
         # Средняя часть: кнопки
         btn_layout = QVBoxLayout()
-        self.btn_open_existing = QPushButton("Открыть существующий репозиторий")
-        self.btn_new = QPushButton("Подключить новый репозиторий")
+        self.btn_new = QPushButton("Открыть проект")
+        # self.btn_new.setIcon(QtGui.QIcon(f'{img_path}/folder.png'))
         self.btn_new.clicked.connect(self.connect_new_repository)  # Обработчик кнопки
-        btn_layout.addWidget(self.btn_open_existing)
         btn_layout.addWidget(self.btn_new)
 
         # Список проектов
@@ -55,6 +55,7 @@ class MainWindow(QMainWindow):
         self.projects_list = QListWidget()
         project_layout.addWidget(self.projects_lbl)
         project_layout.addWidget(self.projects_list)
+        self.projects_list.itemClicked.connect(self.open_recent_repository)
 
         # Нижняя часть: кнопка настроек
         self.settings_btn = QPushButton("Настройки")
@@ -67,6 +68,17 @@ class MainWindow(QMainWindow):
 
         # Обновляем список недавих проектов
         self.update_recent_projects()
+
+    def open_recent_repository(self, item):
+
+        # 1. Выбранная папка
+        folder = item.text()
+        # 2. Обновляем список недавних проектов
+        self.save_recent_repository(folder)
+        # 3. Загружаем новый репозиторий
+        self.git_manager.load_repo(folder)
+        # Закрываем текущее окно и открываем новое
+        self.open_repository_window()
 
     def connect_new_repository(self):
         """Обработчик для кнопки 'Подключить новый репозиторий'"""
@@ -93,7 +105,6 @@ class MainWindow(QMainWindow):
 
         # 3. Сохранить в список недавних проектов
         self.save_recent_repository(folder)
-        print(self.git_manager.get_recent_repositories())
 
         # 4. Загружаем новый репозиторий
         self.git_manager.load_repo(folder)
