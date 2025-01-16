@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QDialog, QVBoxLayout, QLabel, QLineEdit, QPushButton
+from PyQt6.QtWidgets import QDialog, QVBoxLayout, QLabel, QLineEdit, QPushButton, QMessageBox
 
 import webbrowser
 
@@ -19,6 +19,12 @@ class GitConfigDialog(QDialog):
         self.ok_button = QPushButton("OK", self)
         self.ok_button.clicked.connect(self.accept)
         self.layout().addWidget(self.ok_button)
+
+    def warning_save_data(self):
+        QMessageBox.critical(None, "Ошибка", "Для корректной работы необходимо ввести и сохранить свои данные.\n"
+                                             "Для повторной попытки перезапустите программу\n"
+                                             "Эти данные необходимы для идентификации вас как конкретного модератора проектов\n"
+                                             "Они не используются для авторизации")
 
     def get_values(self):
         """

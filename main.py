@@ -1,5 +1,5 @@
 import sys
-from PyQt6.QtWidgets import QApplication, QMessageBox
+from PyQt6.QtWidgets import QApplication, QMessageBox, QDialog
 
 from core.git_checker import is_git_installed
 from gui.dialogs import GitNotInstalledDialog
@@ -17,11 +17,26 @@ def main():
     # Теперь можно импортировать GitPython
     from core.git_manager import GitManager
     from gui.main_window import MainWindow
-
-    # Проверяем глобальные настройки Git
     git_manager = GitManager()
+    # Проверяем глобальные настройки Git
     if not git_manager.check_global_config():
-        sys.exit()  # Завершаем, если настройки Git некорректны
+        from gui.dialogs import GitConfigDialog
+        dialog = GitConfigDialog()
+
+        # Показываем диалог и проверяем результат
+        if dialog.exec() == QDialog.rejected:
+            sys.exit()  # Завершаем приложение, если пользователь закрыл окно
+
+        # Получаем введенные значения
+        username, useremail = dialog.get_values()
+
+        # Проверяем, что данные введены
+        if not username or not useremail:
+            dialog.warning_save_data()
+            sys.exit()  # Завершаем приложение, если данные не введены
+
+        # Сохраняем конфигурацию
+        git_manager.set_global_config(username, useremail)
 
     # Запуск основного окна программы
     window = MainWindow()
