@@ -1,10 +1,15 @@
 import os
 import json
-from git import Repo, InvalidGitRepositoryError, NoSuchPathError
+import subprocess
+from git import Repo, InvalidGitRepositoryError, NoSuchPathError, GitConfigParser, exc
+import webbrowser
 from core.file_status import FileStatus  # Импортируем класс FileStatus
+
 
 class GitManager:
     def __init__(self):
+        # Путь к глобальному файлу конфигурации Git
+        self.global_config_path = os.path.expanduser("~/.gitconfig")
         # Путь к файлу конфигурации, где хранятся последние репозитории
         self.config_path = os.path.join("data", "config.json")
         self.ensure_config_file()
@@ -14,10 +19,8 @@ class GitManager:
     def ensure_config_file(self):
         """Создаёт файл конфигурации, если он отсутствует или пустой."""
         if not os.path.exists(self.config_path):
-            # Если файл не существует, создаём его с дефолтными значениями
             self.create_default_config_file()
         elif os.path.getsize(self.config_path) == 0:
-            # Если файл пустой, создаём его заново
             self.create_default_config_file()
 
     def create_default_config_file(self):
@@ -25,9 +28,7 @@ class GitManager:
         if not os.path.exists(os.path.dirname(self.config_path)):
             os.makedirs(os.path.dirname(self.config_path), exist_ok=True)
 
-        # Содержимое по умолчанию
         default_config = {"recent_repositories": []}
-
         with open(self.config_path, "w") as config_file:
             json.dump(default_config, config_file, indent=4)
 
@@ -127,14 +128,61 @@ class GitManager:
         else:
             raise ValueError("Репозиторий не загружен. Сначала вызовите load_repo().")
 
-    def get_file_status(self):
+    @staticmethod
+    def check_git_installed():
         """
-        Получает состояние файлов в текущем репозитории.
+        Проверяет, установлен ли Git на компьютере.
 
         Returns:
-            dict: Статус файлов в репозитории (modified, untracked, staged).
+            bool: True, если Git установлен, иначе False.
         """
-        if self.file_status:
-            return self.file_status.get_all_file_status()
-        else:
-            raise ValueError("Репозиторий не загружен. Сначала вызовите load_repo().")
+        try:
+            subprocess.run(["git", "--version"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True)
+            return True
+        except FileNotFoundError:
+            return False
+
+    @staticmethod
+    def prompt_git_installation():
+        """
+        Предлагает пользователю установить Git, открывая страницу загрузки.
+        """
+        print("Git не установлен на вашем компьютере.")
+        print("Скачайте и установите Git с официального сайта.")
+        print("Открываю страницу загрузки в браузере...")
+        webbrowser.open("https://git-scm.com/downloads")
+
+    def check_global_config(self):
+        """
+        Проверяет наличие глобальных настроек username и useremail.
+
+        Returns:
+            bool: True, если настройки существуют, иначе False.
+        """
+        try:
+            repo = Repo(".")
+            config = repo.config_reader(config_level="global")
+
+            # Проверяем наличие секции [user]
+            if not config.has_section("user"):
+                return False
+
+            # Проверяем наличие значений name и email
+            username = config.get_value("user", "name", default=None)
+            useremail = config.get_value("user", "email", default=None)
+            return bool(username and useremail)
+        except (exc.GitCommandError, KeyError):
+            return False
+
+    def set_global_config(self, username, useremail):
+        """
+        Устанавливает глобальные настройки username и useremail.
+        """
+        try:
+            repo = Repo(".")
+            config = repo.config_writer(config_level="global")
+            config.set_value("user", "name", username)
+            config.set_value("user", "email", useremail)
+            config.release()
+        except exc.GitCommandError as e:
+            raise ValueError(f"Ошибка при установке глобальных настроек Git: {e}")
